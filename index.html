@@ -108,7 +108,6 @@ import re
 import os
 import pandas as pd
 import base64
-import html
 from googleapiclient.discovery import build
 from IPython.display import HTML, display
 
@@ -139,12 +138,12 @@ def get_video_comments(video_id):
             response = request.execute()
             for item in response['items']:
                 comment = item['snippet']['topLevelComment']['snippet']
-                comments.append({
+                comments.append({{
                     "작성자": comment['authorDisplayName'],
                     "댓글 내용": comment['textDisplay'],
                     "좋아요 수": comment['likeCount'],
                     "작성일": comment['publishedAt']
-                })
+                }})
             
             # 정확히 1000개에서 멈추도록 설정
             if len(comments) >= 1000:
@@ -155,7 +154,7 @@ def get_video_comments(video_id):
         # 1000개가 넘는 경우 1000개까지만 자르기
         return comments[:1000]
     except Exception as e:
-        print(f"댓글 수집 오류: {e}")
+        print(f"댓글 수집 오류: {{e}}")
         return []
 
 def run_collector():
@@ -164,7 +163,7 @@ def run_collector():
     if not video_id:
         print("❌ 유효하지 않은 URL입니다.")
         return
-    print(f"✅ 대상 영상 ID: {video_id}")
+    print(f"✅ 대상 영상 ID: {{video_id}}")
     
     print(f"\\n[진행] 댓글(최대 1,000개) 수집 중...")
     comments = get_video_comments(video_id)
@@ -173,44 +172,39 @@ def run_collector():
         print("\\n⚠️ 수집된 댓글이 없습니다.")
         return
         
-    print(f"\\n✅ 총 {len(comments)}개의 댓글 수집을 완료했습니다.")
+    print(f"\\n✅ 총 {{len(comments)}}개의 댓글 수집을 완료했습니다.")
 
-    file_name = f"youtube_comments_{video_id}.xlsx"
-    
-    # 엑셀 파일 저장
+    file_name = f"youtube_comments_{{video_id}}.xlsx"
     pd.DataFrame(comments).to_excel(file_name, index=False)
-    print(f"🎉 파일 준비 완료: '{file_name}'")
+    print(f"🎉 파일 준비 완료: '{{file_name}}'")
     
+    # 엑셀 파일 Base64 변환 (원본 방식)
+    with open(file_name, 'rb') as f:
+        file_data = f.read()
+    b64_file = base64.b64encode(file_data).decode()
+    payload = f"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{{b64_file}}"
+    
+    # 클립보드용 Base64 변환 (원본 방식)
+    comments_list = [f"[{{c['작성자']}}] {{c['댓글 내용']}}" for c in comments]
+    comments_text = "\\n".join(comments_list)
+    b64_comments = base64.b64encode(comments_text.encode('utf-8')).decode('utf-8')
+
     # 자동 다운로드 시도
     try:
         from google.colab import files
         files.download(file_name)
     except:
         pass
-        
-    # 엑셀 파일 Base64 변환
-    with open(file_name, 'rb') as f:
-        file_data = f.read()
-    b64_file = base64.b64encode(file_data).decode()
-    payload = f"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64_file}"
     
-    # 클립보드 복사용 텍스트 생성 (DOM Injection 안전 방식 도입)
-    comments_list = [f"[{c['작성자']}] {c['댓글 내용']}" for c in comments]
-    comments_text = "\\n".join(comments_list)
-    escaped_comments = html.escape(comments_text)
-    
-    html_code = f"""
+    # UI 생성 (사용자님의 원본 로직 100% 적용)
+    html_code = f'''
     <div style="padding: 24px; background: #fff; border: 2px solid #ef4444; border-radius: 20px; margin-top: 15px; text-align: center; font-family: sans-serif; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
-        <h3 style="margin-top: 0; color: #1f2937; margin-bottom: 20px; font-size: 18px;">📊 데이터 추출 결과 (총 {len(comments)}개)</h3>
-        
-        <!-- 이모지 및 특수문자 처리를 위한 안전한 텍스트 저장소 -->
-        <textarea id="hiddenCopyTextColab" style="display:none;">{escaped_comments}</textarea>
-        
+        <h3 style="margin-top: 0; color: #1f2937; margin-bottom: 20px; font-size: 18px;">📊 데이터 추출 결과 (총 {{len(comments)}}개)</h3>
         <div style="margin-bottom: 15px;">
-            <a href="{payload}" download="{file_name}" style="background: #ff4b4b; color: white; padding: 12px 24px; border-radius: 12px; font-weight: bold; text-decoration: none; font-size: 15px; display: inline-block; margin: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <a href="{{payload}}" download="{{file_name}}" style="background: #ff4b4b; color: white; padding: 12px 24px; border-radius: 12px; font-weight: bold; text-decoration: none; font-size: 15px; display: inline-block; margin: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                 📥 엑셀 파일 저장
             </a>
-            <button onclick="copyToClipboardColab()" id="copyBtnColab" style="background: #4b4bff; color: white; padding: 12px 24px; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; margin: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <button onclick="copyToClipboard()" id="copyBtnColab" style="background: #4b4bff; color: white; padding: 12px 24px; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; margin: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                 📋 클립보드에 복사
             </button>
         </div>
@@ -218,18 +212,18 @@ def run_collector():
     </div>
 
     <script>
-        function copyToClipboardColab() {{
+        function copyToClipboard() {{
             try {{
-                // 숨겨진 영역에서 바로 텍스트를 꺼내오므로 인코딩 깨짐이나 이모지 오류 원천 차단
-                const text = document.getElementById("hiddenCopyTextColab").value;
+                const b64Data = "{{b64_comments}}";
+                const text = decodeURIComponent(escape(window.atob(b64Data)));
                 
-                const ta = document.createElement("textarea");
-                ta.value = text;
-                document.body.appendChild(ta);
-                ta.select();
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
                 
                 document.execCommand('copy');
-                document.body.removeChild(ta);
+                document.body.removeChild(textArea);
 
                 const btn = document.getElementById('copyBtnColab');
                 btn.innerText = "✅ 복사 완료!";
@@ -240,11 +234,10 @@ def run_collector():
                 }}, 2000);
             }} catch (err) {{
                 console.error('복사 실패', err);
-                alert('클립보드 복사에 실패했습니다.');
             }}
         }}
     <\\/script>
-    """
+    '''
     display(HTML(html_code))
 
 if __name__ == "__main__":
@@ -257,7 +250,7 @@ if __name__ == "__main__":
         const statusMessage = document.getElementById('statusMessage');
         const hiddenTextarea = document.getElementById('hiddenTextarea');
 
-        // 마스킹 로직: 마지막 10글자 숨김
+        // 마스킹 로직
         function getMaskedValue(value) {
             if (value.length > 10) {
                 return value.slice(0, -10) + "**********";
@@ -290,7 +283,6 @@ if __name__ == "__main__":
                 return;
             }
             
-            // 파이썬 코드 내의 변수 치환
             let finalCode = pythonTemplate.replace('{API_KEY}', rawApiKey).replace('{VIDEO_URL}', videoUrl);
             hiddenTextarea.value = finalCode;
             hiddenTextarea.select();
