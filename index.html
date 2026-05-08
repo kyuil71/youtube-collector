@@ -24,7 +24,7 @@
             <!-- Title -->
             <h1 class="text-2xl font-black tracking-tighter mb-2 drop-shadow-md">YOUTUBE voice collector</h1>
             <!-- Subtitle -->
-            <p class="text-red-50 text-sm font-semibold opacity-95">모바일 최적화 · 댓글 자동 분할 추출</p>
+            <p class="text-red-50 text-sm font-semibold opacity-95">모바일 최적화 · 최대 1000개 댓글 추출</p>
         </header>
 
         <!-- Main Content -->
@@ -124,7 +124,7 @@ def extract_video_id(url):
     return None
 
 def get_video_comments(video_id):
-    """최대 3,000개의 댓글을 수집합니다."""
+    """최대 1,000개의 댓글을 엄격히 수집합니다."""
     youtube = build("youtube", "v3", developerKey=API_KEY)
     comments = []
     try:
@@ -144,10 +144,15 @@ def get_video_comments(video_id):
                     "좋아요 수": comment['likeCount'],
                     "작성일": comment['publishedAt']
                 })
-            request = youtube.commentThreads().list_next(request, response)
-            if len(comments) >= 3000:
+            
+            # 정확히 1000개에서 멈추도록 설정
+            if len(comments) >= 1000:
                 break
-        return comments
+                
+            request = youtube.commentThreads().list_next(request, response)
+            
+        # 1000개가 넘는 경우 1000개까지만 자르기
+        return comments[:1000]
     except Exception as e:
         print(f"댓글 수집 오류: {e}")
         return []
@@ -160,89 +165,77 @@ def run_collector():
         return
     print(f"✅ 대상 영상 ID: {{video_id}}")
     
-    print(f"\\n[진행] 댓글(최대 3,000개) 수집 중...")
+    print(f"\\n[진행] 댓글(최대 1,000개) 수집 중...")
     comments = get_video_comments(video_id)
     
     if not comments:
         print("\\n⚠️ 수집된 댓글이 없습니다.")
         return
         
-    print(f"\\n✅ 총 {{len(comments)}}개의 댓글을 수집했습니다. 1000개씩 분할을 시작합니다.")
+    print(f"\\n✅ 총 {{len(comments)}}개의 댓글 수집을 완료했습니다.")
 
-    # 1000개씩 분할
-    chunk_size = 1000
-    chunks = [comments[i:i + chunk_size] for i in range(0, len(comments), chunk_size)]
+    file_name = f"youtube_comments_{{video_id}}.xlsx"
     
-    html_buttons = ""
+    # 엑셀 파일 저장
+    pd.DataFrame(comments).to_excel(file_name, index=False)
+    print(f"🎉 파일 준비 완료: '{{file_name}}'")
     
-    for i, chunk in enumerate(chunks):
-        part_num = i + 1
-        file_name = f"youtube_comments_{{video_id}}_part{{part_num}}.xlsx"
+    # 자동 다운로드 시도
+    try:
+        from google.colab import files
+        files.download(file_name)
+    except:
+        pass
         
-        # 엑셀 파일 저장
-        pd.DataFrame(chunk).to_excel(file_name, index=False)
-        print(f"🎉 파일 저장 완료: '{{file_name}}'")
-        
-        # 자동 다운로드 시도
-        try:
-            from google.colab import files
-            files.download(file_name)
-        except:
-            pass
-            
-        # 엑셀 파일 Base64 변환
-        with open(file_name, 'rb') as f:
-            b64_file = base64.b64encode(f.read()).decode()
-        payload = f"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{{b64_file}}"
-        
-        # 클립보드 복사용 텍스트 생성
-        comments_list = [f"[{{c['작성자']}}] {{c['댓글 내용']}}" for c in chunk]
-        comments_text = "\\n".join(comments_list)
-        b64_comments = base64.b64encode(comments_text.encode('utf-8')).decode('utf-8')
-        
-        # UI 버튼 생성 (HTML)
-        html_buttons += f"""
+    # 엑셀 파일 Base64 변환
+    with open(file_name, 'rb') as f:
+        b64_file = base64.b64encode(f.read()).decode()
+    payload = f"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{{b64_file}}"
+    
+    # 클립보드 복사용 텍스트 생성
+    comments_list = [f"[{{c['작성자']}}] {{c['댓글 내용']}}" for c in comments]
+    comments_text = "\\n".join(comments_list)
+    b64_comments = base64.b64encode(comments_text.encode('utf-8')).decode('utf-8')
+    
+    # UI 버튼 생성 (HTML)
+    html_code = f"""
+    <div style="padding: 24px; background: #fff; border: 2px solid #ef4444; border-radius: 20px; margin-top: 15px; text-align: center; font-family: sans-serif; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+        <h3 style="margin-top: 0; color: #1f2937; margin-bottom: 20px; font-size: 18px;">📊 데이터 추출 결과 (총 {{len(comments)}}개)</h3>
         <div style="margin-bottom: 12px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;">
-            <a href="{{payload}}" download="{{file_name}}" style="background: #ff4b4b; color: white; padding: 12px 20px; border-radius: 12px; font-weight: bold; text-decoration: none; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
-                📥 엑셀파일 저장-{{part_num}}
+            <a href="{{payload}}" download="{{file_name}}" style="background: #ff4b4b; color: white; padding: 12px 24px; border-radius: 12px; font-weight: bold; text-decoration: none; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
+                📥 엑셀파일 저장
             </a>
-            <button onclick="copyToClipboard_{{part_num}}('{{b64_comments}}', this)" style="background: #4b4bff; color: white; padding: 12px 20px; border: none; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
-                📋 클립보드 저장-{{part_num}}
+            <button onclick="copyToClipboard('{{b64_comments}}', this)" style="background: #4b4bff; color: white; padding: 12px 24px; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
+                📋 클립보드 저장
             </button>
         </div>
-        <script>
-            function copyToClipboard_{{part_num}}(b64Data, btn) {{
-                try {{
-                    const text = decodeURIComponent(escape(window.atob(b64Data)));
-                    const textArea = document.createElement("textarea");
-                    textArea.value = text;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-
-                    const originalText = btn.innerText;
-                    btn.innerText = "✅ 복사 완료!";
-                    btn.style.background = "#22c55e";
-                    setTimeout(() => {{
-                        btn.innerText = originalText;
-                        btn.style.background = "#4b4bff";
-                    }}, 2000);
-                }} catch (err) {{
-                    console.error('복사 실패', err);
-                }}
-            }}
-        <\\/script>
-        """
-
-    # 최종 UI 렌더링
-    html_code = f'''
-    <div style="padding: 24px; background: #fff; border: 2px solid #ef4444; border-radius: 20px; margin-top: 15px; text-align: center; font-family: sans-serif; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
-        <h3 style="margin-top: 0; color: #1f2937; margin-bottom: 20px; font-size: 18px;">📊 데이터 추출 결과 (총 {{len(chunks)}}개 파트)</h3>
-        {{html_buttons}}
         <p style="font-size: 13px; color: #6b7280; margin-top: 15px; margin-bottom: 0;">자동 다운로드가 되지 않을 경우 위 버튼을 사용하세요.</p>
     </div>
-    '''
+    <script>
+        function copyToClipboard(b64Data, btn) {{
+            try {{
+                const text = decodeURIComponent(escape(window.atob(b64Data)));
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                const originalText = btn.innerText;
+                btn.innerText = "✅ 복사 완료!";
+                btn.style.background = "#22c55e";
+                setTimeout(() => {{
+                    btn.innerText = originalText;
+                    btn.style.background = "#4b4bff";
+                }}, 2000);
+            }} catch (err) {{
+                console.error('복사 실패', err);
+            }}
+        }}
+    <\\/script>
+    """
+
     display(HTML(html_code))
 
 if __name__ == "__main__":
