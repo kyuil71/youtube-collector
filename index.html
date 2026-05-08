@@ -3,322 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>REDDIT voice collector</title>
+    <title>유튜브 데이터 수집기 설정 도구</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="py-0 sm:py-6">
 
+    <!-- Mobile Container -->
     <div class="w-full max-w-md glass-container sm:rounded-[2.5rem] min-h-screen sm:min-h-0 flex flex-col relative overflow-hidden">
         
+        <!-- App Header -->
         <header class="header-curve pt-14 pb-12 px-6 text-white text-center shadow-lg flex flex-col items-center relative z-10">
+            <!-- Centered Icon Wrapper -->
             <div class="p-4 bg-white/20 rounded-[1.5rem] mb-6 shadow-inner backdrop-blur-md">
-                <i data-lucide="message-square-more" class="w-10 h-10 text-white"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="white" viewBox="0 0 16 16">
+                    <path d="M12.5 16a.5.5 0 0 1-.5-.5v-1.1c0-1.25-.75-2.25-2-2.25H3.5A1.5 1.5 0 0 1 2 10.65V2.35A1.5 1.5 0 0 1 3.5 1h9A1.5 1.5 0 0 1 14 2.35v8.3c0 .8-.65 1.45-1.45 1.45H12.5a.5.5 0 0 1 0 1h.05c1.35 0 2.45-1.1 2.45-2.45V2.35C15 1.05 13.95 0 12.5 0h-9C2.05 0 1 1.05 1 2.35v8.3C1 11.95 2.05 13 3.5 13H10c.85 0 1 .4 1 1.25V15.5a.5.5 0 0 1-.5.5z"/>
+                    <path d="M4 4h8v1H4V4zm0 3h8v1H4V7zm0 3h5v1H4v-1z"/>
+                </svg>
             </div>
-            <h1 class="text-2xl font-black tracking-tighter mb-2 drop-shadow-md">REDDIT voice collector</h1>
-            <p class="text-red-50 text-sm font-semibold opacity-95">모바일 최적화 · 댓글 최대 1000개 수집</p>
+            <!-- Title -->
+            <h1 class="text-2xl font-black tracking-tighter mb-2 drop-shadow-md">YOUTUBE voice collector</h1>
+            <!-- Subtitle -->
+            <p class="text-red-50 text-sm font-semibold opacity-95">모바일 최적화 · 최대 1000개 댓글 추출</p>
         </header>
 
-        <main class="flex-grow p-6 space-y-8 bg-white/50 relative z-0 overflow-y-auto pb-10 sm:pb-8 sm:rounded-b-[2.5rem]">
+        <!-- Main Content -->
+        <main class="flex-grow p-6 space-y-10 bg-white/50 relative z-0">
             
+            <!-- Step 1: Card Style Link -->
             <section class="space-y-4">
                 <div class="flex items-center gap-3 mb-1">
                     <span class="flex items-center justify-center w-7 h-7 bg-red-600 text-white text-xs font-bold rounded-full shadow-md">1</span>
-                    <h2 class="text-lg font-bold text-gray-800">Reddit URL 입력</h2>
+                    <h2 class="text-lg font-bold text-gray-800">API 키 발급</h2>
                 </div>
-                <div class="space-y-3" id="url-container">
-                    <input type="text" class="url-field input-field w-full px-5 py-4 bg-white border border-gray-200 rounded-2xl outline-none text-sm shadow-sm" placeholder="첫 번째 URL 입력">
-                    <input type="text" class="url-field input-field w-full px-5 py-4 bg-white border border-gray-200 rounded-2xl outline-none text-sm shadow-sm" placeholder="두 번째 URL 입력">
-                    <input type="text" class="url-field input-field w-full px-5 py-4 bg-white border border-gray-200 rounded-2xl outline-none text-sm shadow-sm" placeholder="세 번째 URL 입력">
-                    <input type="text" class="url-field input-field w-full px-5 py-4 bg-white border border-gray-200 rounded-2xl outline-none text-sm shadow-sm" placeholder="네 번째 URL 입력">
-                    <input type="text" class="url-field input-field w-full px-5 py-4 bg-white border border-gray-200 rounded-2xl outline-none text-sm shadow-sm" placeholder="다섯 번째 URL 입력">
+                <a href="https://console.cloud.google.com/apis/credentials?project=gen-lang-client-0607796199" target="_blank" rel="noopener noreferrer" class="block bg-white border border-gray-100 p-5 rounded-3xl hover:bg-gray-50 btn-hover shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-gray-900 font-bold text-lg block mb-1">인증 정보 페이지 이동</span>
+                            <span class="text-sm text-gray-500 leading-tight">구글 클라우드 콘솔에서 API 키를 생성하세요.</span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                </a>
+            </section>
+
+            <!-- Step 2 & 3: Input Forms -->
+            <section class="space-y-8">
+                <!-- API Key Input -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="flex items-center justify-center w-7 h-7 bg-red-600 text-white text-xs font-bold rounded-full shadow-md">2</span>
+                        <h2 class="text-lg font-bold text-gray-800">API 키 입력</h2>
+                    </div>
+                    <input type="text" id="apiKey" placeholder="AIza... 로 시작하는 키를 입력하세요" class="input-field w-full px-5 py-5 bg-white border border-gray-200 rounded-2xl outline-none text-base font-mono shadow-sm">
+                    <p class="text-[12px] text-gray-400 px-2 leading-relaxed font-medium">※ 입력 후 칸 외부를 누르면 보안을 위해 마지막 10글자가 숨겨집니다.</p>
+                </div>
+
+                <!-- Video URL Input -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="flex items-center justify-center w-7 h-7 bg-red-600 text-white text-xs font-bold rounded-full shadow-md">3</span>
+                        <h2 class="text-lg font-bold text-gray-800">유튜브 영상 주소</h2>
+                    </div>
+                    <input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." class="input-field w-full px-5 py-5 bg-white border border-gray-200 rounded-2xl outline-none text-base shadow-sm">
                 </div>
             </section>
 
-            <section class="grid grid-cols-2 gap-4 text-center pt-2 border-t border-gray-200/60">
-                <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-1">처리 URL</div>
-                    <div id="stat-urls" class="text-2xl font-black text-gray-800">0</div>
-                </div>
-                <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-1">총 댓글</div>
-                    <div id="stat-comments" class="text-2xl font-black text-gray-800">0</div>
-                </div>
-            </section>
-
-            <section class="space-y-3">
-                <button id="run-btn" class="btn-hover w-full bg-red-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-red-200 flex items-center justify-center gap-2 text-base disabled:bg-gray-300 disabled:shadow-none transition-all">
-                    <i data-lucide="play" class="w-5 h-5"></i>
-                    <span id="run-btn-text">수집 시작</span>
-                </button>
-                
-                <div class="grid grid-cols-2 gap-3">
-                    <button id="download-csv-btn" disabled class="btn-hover w-full bg-gray-800 text-white font-bold py-4 rounded-2xl shadow-md flex items-center justify-center gap-2 text-sm disabled:bg-gray-300 disabled:shadow-none transition-all">
-                        <i data-lucide="file-down" class="w-4 h-4"></i>
-                        <span>엑셀 저장(CSV)</span>
-                    </button>
-                    <button id="copy-btn" disabled class="btn-hover w-full bg-[#ff7f50] text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-200 flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:shadow-none transition-all">
-                        <i data-lucide="copy" class="w-4 h-4"></i>
-                        <span>클립보드 복사</span>
-                    </button>
-                </div>
-            </section>
-
-            <section id="results-container" class="space-y-4 pt-4 border-t border-gray-200/60">
-                <div class="flex items-center justify-between px-1">
-                    <h2 class="text-lg font-black text-gray-800">수집 결과</h2>
-                    <span id="status-badge" class="px-3 py-1 rounded-full bg-gray-100 text-gray-500 text-[11px] font-bold border border-gray-200 uppercase">대기 중</span>
-                </div>
-                <div id="results-list" class="space-y-6"></div>
-            </section>
+            <!-- Status Message -->
+            <div id="statusMessage" class="hidden animate-fade-in shadow-sm"></div>
 
         </main>
+
+        <!-- Footer Actions -->
+        <footer class="p-6 bg-white/90 border-t border-gray-100 space-y-4 pb-10 sm:pb-8 backdrop-blur-md relative z-10 sm:rounded-b-[2.5rem]">
+            <button id="copyBtn" class="btn-hover w-full bg-red-600 text-white font-bold py-5 rounded-2xl shadow-lg shadow-red-200 flex items-center justify-center gap-3 text-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                </svg>
+                코드 생성 및 복사하기
+            </button>
+            
+            <a href="https://colab.research.google.com/notebooks/welcome.ipynb" id="colabLink" target="_blank" rel="noopener noreferrer" class="btn-hover w-full bg-[#ff7f50] text-white font-bold py-5 rounded-2xl shadow-lg shadow-orange-200 flex items-center justify-center gap-3 text-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+                Google Colab 실행하기
+            </a>
+        </footer>
     </div>
 
+    <!-- Hidden Copy Target -->
+    <textarea id="hiddenTextarea" class="fixed opacity-0 pointer-events-none"></textarea>
+
     <script>
-        lucide.createIcons();
+        let rawApiKey = "";
 
-        const runBtn = document.getElementById('run-btn');
-        const runBtnText = document.getElementById('run-btn-text');
-        const downloadCsvBtn = document.getElementById('download-csv-btn');
-        const copyBtn = document.getElementById('copy-btn');
-        const statUrls = document.getElementById('stat-urls');
-        const statComments = document.getElementById('stat-comments');
-        const statusBadge = document.getElementById('status-badge');
-        const resultsList = document.getElementById('results-list');
+        const pythonTemplate = `
+# 1. 필수 라이브러리 설치
+!pip install google-api-python-client pandas openpyxl
 
-        let appState = {
-            running: false,
-            items: [],
-            summary: { inputCount: 0, successCount: 0, failCount: 0, totalComments: 0 }
-        };
+import re
+import os
+import pandas as pd
+import base64
+from googleapiclient.discovery import build
+from IPython.display import HTML, display
 
-        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+# ==========================================
+# 설정: 주입된 정보
+# ==========================================
+API_KEY = "{API_KEY}"
+TARGET_URL = "{VIDEO_URL}"
 
-        function setBadge(text, tone = 'neutral') {
-            const toneMap = {
-                neutral: 'bg-gray-100 text-gray-500 border-gray-200',
-                running: 'bg-blue-50 text-blue-600 border-blue-200',
-                success: 'bg-green-50 text-green-600 border-green-200',
-                danger: 'bg-red-50 text-red-600 border-red-200'
-            };
-            statusBadge.className = `px-3 py-1 rounded-full text-[11px] font-bold border ${toneMap[tone]} uppercase transition-colors`;
-            statusBadge.textContent = text;
-        }
+def extract_video_id(url):
+    regex = r"(?:v=|\\/)([0-9A-Za-z_-]{11}).*"
+    match = re.search(regex, url)
+    if match: return match.group(1)
+    return None
 
-        function updateStats() {
-            statUrls.textContent = String(appState.summary.inputCount);
-            statComments.textContent = String(appState.summary.totalComments);
-            const hasData = appState.items.length > 0;
-            downloadCsvBtn.disabled = !hasData;
-            copyBtn.disabled = !hasData;
-        }
-
-        function resetAppState() {
-            appState = { running: false, items: [], summary: { inputCount: 0, successCount: 0, failCount: 0, totalComments: 0 } };
-            resultsList.innerHTML = '';
-            updateStats();
-            setBadge('대기 중', 'neutral');
-        }
-
-        function normalizeRedditPostUrl(input) {
-            const raw = String(input || '').trim();
-            if (!raw) return null;
-            try {
-                const url = new URL(raw);
-                const host = url.hostname.replace(/^m\./, '').toLowerCase();
-                if (host === 'redd.it') {
-                    const postId = url.pathname.replace(/^\/+|\/+$/g, '');
-                    return { canonicalUrl: `https://www.reddit.com/comments/${postId}`, postId };
-                }
-                let match = url.pathname.match(/\/comments\/([a-z0-9]+)(?:\/|$)/i) || url.pathname.match(/\/r\/[^/]+\/comments\/([a-z0-9]+)(?:\/|$)/i);
-                if (!match) return null;
-                return { canonicalUrl: `https://www.reddit.com/comments/${match[1]}`, postId: match[1] };
-            } catch { return null; }
-        }
-
-        async function fetchJsonWithFallback(targetUrl) {
-            const proxies = [
-                targetUrl,
-                `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`
-            ];
-            for (const url of proxies) {
-                try {
-                    const res = await fetch(url);
-                    if (res.ok) return await res.json();
-                } catch {}
-            }
-            throw new Error('데이터 응답 오류');
-        }
-
-        function parseThingList(children, acc = [], moreBuckets = []) {
-            if (!Array.isArray(children)) return { comments: acc, moreBuckets };
-            for (const child of children) {
-                if (child.kind === 't1') {
-                    const d = child.data || {};
-                    acc.push({
-                        id: d.id, parent_id: d.parent_id, author: d.author || '[deleted]',
-                        body: d.body || '', score: d.score || 0, created_utc: d.created_utc, depth: d.depth || 0
-                    });
-                    if (d.replies && d.replies.data) parseThingList(d.replies.data.children, acc, moreBuckets);
-                } else if (child.kind === 'more') {
-                    const d = child.data || {};
-                    if (d.children && d.children.length > 0) moreBuckets.push({ parent_id: d.parent_id, children: d.children });
-                }
-            }
-            return { comments: acc, moreBuckets };
-        }
-
-        // 최대 수집 제한을 파라미터(maxNeeded)로 받도록 수정
-        async function fetchMoreChildren(postId, moreBuckets, maxNeeded) {
-            const collected = [];
-            const queue = [...moreBuckets];
-            while (queue.length > 0 && collected.length < maxNeeded) {
-                const bucket = queue.shift();
-                const url = `https://www.reddit.com/api/morechildren.json?api_type=json&raw_json=1&link_id=t3_${postId}&children=${bucket.children.slice(0, 50).join(',')}`;
-                try {
-                    const data = await fetchJsonWithFallback(url);
-                    const things = data?.json?.data?.things;
-                    if (Array.isArray(things)) {
-                        const parsed = parseThingList(things, [], []);
-                        collected.push(...parsed.comments);
-                        if (parsed.moreBuckets.length > 0) queue.push(...parsed.moreBuckets);
-                    }
-                    await sleep(350);
-                } catch {}
-            }
-            return collected;
-        }
-
-        async function collect(rawUrl) {
-            const norm = normalizeRedditPostUrl(rawUrl);
-            if (!norm) throw new Error('잘못된 URL');
-            const data = await fetchJsonWithFallback(`${norm.canonicalUrl}.json?raw_json=1&limit=500&depth=100&sort=best`);
-            const postNode = data?.[0]?.data?.children?.[0]?.data;
-            const parsed = parseThingList(data?.[1]?.data?.children || [], [], []);
-            let comments = [...parsed.comments];
+def get_video_comments(video_id):
+    """최대 1,000개의 댓글을 엄격히 수집합니다."""
+    youtube = build("youtube", "v3", developerKey=API_KEY)
+    comments = []
+    try:
+        request = youtube.commentThreads().list(
+            part="snippet",
+            videoId=video_id,
+            maxResults=100,
+            textFormat="plainText"
+        )
+        while request:
+            response = request.execute()
+            for item in response['items']:
+                comment = item['snippet']['topLevelComment']['snippet']
+                comments.append({
+                    "작성자": comment['authorDisplayName'],
+                    "댓글 내용": comment['textDisplay'],
+                    "좋아요 수": comment['likeCount'],
+                    "작성일": comment['publishedAt']
+                })
             
-            // 1000개 제한 로직 적용
-            if (parsed.moreBuckets.length > 0 && comments.length < 1000) {
-                const remaining = 1000 - comments.length;
-                const extra = await fetchMoreChildren(postNode.id, parsed.moreBuckets, remaining);
-                comments.push(...extra);
-            }
+            # 정확히 1000개에서 멈추도록 설정
+            if len(comments) >= 1000:
+                break
+                
+            request = youtube.commentThreads().list_next(request, response)
             
-            // 안전 장치: 배열 자르기
-            if (comments.length > 1000) {
-                comments = comments.slice(0, 1000);
-            }
+        # 1000개가 넘는 경우 1000개까지만 자르기
+        return comments[:1000]
+    except Exception as e:
+        print(f"댓글 수집 오류: {e}")
+        return []
 
-            return {
-                title: postNode.title, body: postNode.selftext || "", author: postNode.author, 
-                subreddit: postNode.subreddit, comments: comments, url: rawUrl
-            };
-        }
+def run_collector():
+    print("🚀 유튜브 댓글 수집 엔진 가동...")
+    video_id = extract_video_id(TARGET_URL)
+    if not video_id:
+        print("❌ 유효하지 않은 URL입니다.")
+        return
+    print(f"✅ 대상 영상 ID: {{video_id}}")
+    
+    print(f"\\n[진행] 댓글(최대 1,000개) 수집 중...")
+    comments = get_video_comments(video_id)
+    
+    if not comments:
+        print("\\n⚠️ 수집된 댓글이 없습니다.")
+        return
+        
+    print(f"\\n✅ 총 {{len(comments)}}개의 댓글 수집을 완료했습니다.")
 
-        function renderResult(item) {
-            const wrap = document.createElement('div');
-            wrap.className = 'bg-white rounded-2xl p-5 border border-gray-100 overflow-hidden animate-fade-in shadow-sm';
-            wrap.innerHTML = `
-                <div class="mb-4">
-                    <h3 class="font-black text-base text-gray-800 leading-snug">${item.title}</h3>
-                    <p class="text-[12px] text-gray-400 font-bold mt-1.5 uppercase tracking-tight">r/${item.subreddit} · @${item.author} · 댓글 ${item.comments.length}개</p>
-                </div>
-                ${item.body ? `
-                    <div class="bg-gray-50 border border-gray-100 rounded-xl p-3 text-sm text-gray-600 mb-4 whitespace-pre-wrap break-words italic shadow-inner">
-                        <strong class="block mb-1.5 not-italic text-red-500 text-[12px]">[게시물 본문]</strong>
-                        ${item.body}
-                    </div>
-                ` : ''}
-                <div class="overflow-x-auto scrollbar-thin border border-gray-100 rounded-xl bg-white">
-                    <table class="comment-table">
-                        <thead class="bg-gray-50 text-gray-500 text-[11px] uppercase font-black">
-                            <tr><th class="col-author text-left">작성자</th><th class="text-left">내용</th></tr>
-                        </thead>
-                        <tbody class="text-sm">
-                            ${item.comments.slice(0, 30).map(c => `
-                                <tr>
-                                    <td class="col-author text-gray-900">${c.author}</td>
-                                    <td class="text-gray-700">
-                                        <div style="margin-left: ${Math.min(c.depth * 6, 40)}px" class="${c.depth > 0 ? 'border-l-2 border-gray-200 pl-2' : ''} whitespace-pre-wrap">${c.body}</div>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                ${item.comments.length > 30 ? `<p class="mt-3 text-[12px] text-gray-400 text-center font-bold italic">* 상위 30개 댓글 미리보기 중</p>` : ''}
-            `;
-            resultsList.appendChild(wrap);
-        }
-
-        async function run() {
-            const inputs = Array.from(document.querySelectorAll('.url-field')).map(i => i.value.trim()).filter(Boolean);
-            if (!inputs.length) return;
-            resetAppState();
-            appState.running = true;
-            runBtn.disabled = true;
-            runBtnText.textContent = "수집 중...";
-            setBadge('수집 중...', 'running');
-            appState.summary.inputCount = inputs.length;
-
-            for (const url of inputs) {
-                try {
-                    const res = await collect(url);
-                    appState.items.push(res);
-                    appState.summary.successCount++;
-                    appState.summary.totalComments += res.comments.length;
-                    renderResult(res);
-                } catch (e) {
-                    appState.summary.failCount++;
-                }
-                updateStats();
-            }
-            runBtn.disabled = false;
-            runBtnText.textContent = "수집 시작";
-            setBadge('작업 완료', 'success');
-            lucide.createIcons();
-        }
-
-        function getCsvString() {
-            if (!appState.items.length) return "";
-            let output = "### 수집 조사한 URL 목록 ###\n" + appState.items.map(i => i.url).join("\n") + "\n\n";
-            appState.items.forEach((item, idx) => {
-                output += `[게시물 #${idx + 1} 정보]\n제목:,"${item.title.replace(/"/g, '""')}"\n작성자:,${item.author}\nURL:,${item.url}\n[본문 내용]:\n"${item.body.replace(/"/g, '""')}"\n\n`;
-                output += `[댓글 리스트]\n작성자,계층,내용\n` + item.comments.map(c => `"${c.author}",${c.depth},"${c.body.replace(/"/g, '""')}"`).join("\n") + "\n\n";
-            });
-            return output;
-        }
-
-        function exportCsv() {
-            const csv = getCsvString();
-            if (!csv) return;
-            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `reddit_data_${Date.now()}.csv`;
-            link.click();
-        }
-
-        function copyToClipboard() {
-            const csv = getCsvString();
-            if (!csv) return;
-            const t = document.createElement("textarea");
-            t.value = csv; t.style.position = "fixed"; t.style.left = "-9999px";
-            document.body.appendChild(t); t.select();
-            try {
+    file_name = f"youtube_comments_{{video_id}}.xlsx"
+    
+    # 엑셀 파일 저장
+    pd.DataFrame(comments).to_excel(file_name, index=False)
+    print(f"🎉 파일 준비 완료: '{{file_name}}'")
+    
+    # 자동 다운로드 시도
+    try:
+        from google.colab import files
+        files.download(file_name)
+    except:
+        pass
+        
+    # 엑셀 파일 Base64 변환
+    with open(file_name, 'rb') as f:
+        b64_file = base64.b64encode(f.read()).decode()
+    payload = f"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{{b64_file}}"
+    
+    # 클립보드 복사용 텍스트 생성
+    comments_list = [f"[{{c['작성자']}}] {{c['댓글 내용']}}" for c in comments]
+    comments_text = "\\n".join(comments_list)
+    b64_comments = base64.b64encode(comments_text.encode('utf-8')).decode('utf-8')
+    
+    # UI 버튼 생성 (HTML)
+    html_code = f"""
+    <div style="padding: 24px; background: #fff; border: 2px solid #ef4444; border-radius: 20px; margin-top: 15px; text-align: center; font-family: sans-serif; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+        <h3 style="margin-top: 0; color: #1f2937; margin-bottom: 20px; font-size: 18px;">📊 데이터 추출 결과 (총 {{len(comments)}}개)</h3>
+        <div style="margin-bottom: 12px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;">
+            <a href="{{payload}}" download="{{file_name}}" style="background: #ff4b4b; color: white; padding: 12px 24px; border-radius: 12px; font-weight: bold; text-decoration: none; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
+                📥 엑셀파일 저장
+            </a>
+            <button onclick="copyToClipboard('{{b64_comments}}', this)" style="background: #4b4bff; color: white; padding: 12px 24px; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
+                📋 클립보드 저장
+            </button>
+        </div>
+        <p style="font-size: 13px; color: #6b7280; margin-top: 15px; margin-bottom: 0;">자동 다운로드가 되지 않을 경우 위 버튼을 사용하세요.</p>
+    </div>
+    <script>
+        function copyToClipboard(b64Data, btn) {{
+            try {{
+                const text = decodeURIComponent(escape(window.atob(b64Data)));
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
                 document.execCommand('copy');
-                const oldText = copyBtn.querySelector('span').textContent;
-                copyBtn.querySelector('span').textContent = "복사 완료!";
-                setTimeout(() => { copyBtn.querySelector('span').textContent = oldText; }, 2000);
-            } catch (err) {}
-            document.body.removeChild(t);
+                document.body.removeChild(textArea);
+
+                const originalText = btn.innerText;
+                btn.innerText = "✅ 복사 완료!";
+                btn.style.background = "#22c55e";
+                setTimeout(() => {{
+                    btn.innerText = originalText;
+                    btn.style.background = "#4b4bff";
+                }}, 2000);
+            }} catch (err) {{
+                console.error('복사 실패', err);
+            }}
+        }}
+    <\\/script>
+    """
+
+    display(HTML(html_code))
+
+if __name__ == "__main__":
+    run_collector()
+`;
+
+        const copyBtn = document.getElementById('copyBtn');
+        const apiKeyInput = document.getElementById('apiKey');
+        const videoUrlInput = document.getElementById('videoUrl');
+        const statusMessage = document.getElementById('statusMessage');
+        const hiddenTextarea = document.getElementById('hiddenTextarea');
+
+        // 마스킹 로직: 마지막 10글자 숨김
+        function getMaskedValue(value) {
+            if (value.length > 10) {
+                return value.slice(0, -10) + "**********";
+            } else if (value.length > 0) {
+                return "*".repeat(value.length);
+            }
+            return "";
         }
 
-        runBtn.addEventListener('click', run);
-        downloadCsvBtn.addEventListener('click', exportCsv);
-        copyBtn.addEventListener('click', copyToClipboard);
+        apiKeyInput.addEventListener('input', (e) => { rawApiKey = e.target.value; });
+        apiKeyInput.addEventListener('focus', (e) => { e.target.value = rawApiKey; });
+        apiKeyInput.addEventListener('blur', (e) => { e.target.value = getMaskedValue(rawApiKey); });
+
+        function showStatus(msg, isError = false) {
+            statusMessage.textContent = msg;
+            statusMessage.className = `block text-center text-sm font-bold p-5 rounded-2xl animate-fade-in shadow-sm ${isError ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'}`;
+            setTimeout(() => { 
+                statusMessage.style.opacity = '0';
+                setTimeout(() => {
+                    statusMessage.className = 'hidden'; 
+                    statusMessage.style.opacity = '1';
+                }, 300);
+            }, 5000);
+        }
+
+        copyBtn.addEventListener('click', () => {
+            const videoUrl = videoUrlInput.value.trim();
+            if (!rawApiKey || !videoUrl) {
+                showStatus('API 키와 주소를 모두 입력해 주세요.', true);
+                return;
+            }
+            
+            // 파이썬 코드 내의 변수 치환
+            let finalCode = pythonTemplate.replace('{API_KEY}', rawApiKey).replace('{VIDEO_URL}', videoUrl);
+            hiddenTextarea.value = finalCode;
+            hiddenTextarea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showStatus('코드가 복사되었습니다! 아래 버튼을 눌러 코랩에서 실행하세요.');
+                    copyBtn.innerHTML = '✅ 복사 완료!';
+                    copyBtn.classList.add('bg-green-500', 'shadow-green-200');
+                    copyBtn.classList.remove('bg-red-600', 'shadow-red-200');
+                    setTimeout(() => { 
+                        copyBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>코드 생성 및 복사하기`; 
+                        copyBtn.classList.remove('bg-green-500', 'shadow-green-200');
+                        copyBtn.classList.add('bg-red-600', 'shadow-red-200');
+                    }, 2000);
+                }
+            } catch (err) {
+                showStatus('복사 중 오류가 발생했습니다. 수동으로 복사해 주세요.', true);
+            }
+        });
     </script>
 </body>
 </html>
