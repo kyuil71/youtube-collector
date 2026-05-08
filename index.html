@@ -23,6 +23,7 @@
         </header>
 
         <main class="flex-grow p-6 space-y-10 bg-white/50 relative z-0">
+            
             <section class="space-y-4">
                 <div class="flex items-center gap-3 mb-1">
                     <span class="flex items-center justify-center w-7 h-7 bg-red-600 text-white text-xs font-bold rounded-full shadow-md">1</span>
@@ -61,6 +62,7 @@
             </section>
 
             <div id="statusMessage" class="hidden animate-fade-in shadow-sm"></div>
+
         </main>
 
         <footer class="p-6 bg-white/90 border-t border-gray-100 space-y-4 pb-10 sm:pb-8 backdrop-blur-md relative z-10 sm:rounded-b-[2.5rem]">
@@ -70,6 +72,7 @@
                 </svg>
                 코드 생성 및 복사하기
             </button>
+            
             <a href="https://colab.research.google.com/notebooks/welcome.ipynb" id="colabLink" target="_blank" rel="noopener noreferrer" class="btn-hover w-full bg-[#ff7f50] text-white font-bold py-5 rounded-2xl shadow-lg shadow-orange-200 flex items-center justify-center gap-3 text-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
@@ -169,14 +172,14 @@ def run_collector():
     except:
         pass
     
-    # 원본 버튼 생성 방식 복구 (문자열 결합 방식)
+    # 원본 버튼 생성 방식 복구 및 브라우저 파서 오류(버그) 완전 차단
     ui_html = '<div style="padding: 24px; background: #fff; border: 2px solid #ef4444; border-radius: 20px; margin-top: 15px; text-align: center; font-family: sans-serif; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">'
     ui_html += '<h3 style="margin-top: 0; color: #1f2937; margin-bottom: 20px; font-size: 18px;">📊 데이터 추출 결과 (총 ' + str(len(comments)) + '개)</h3>'
     ui_html += '<div style="margin-bottom: 15px;">'
     ui_html += '<a href="' + payload + '" download="' + file_name + '" style="background: #ff4b4b; color: white; padding: 12px 24px; border-radius: 12px; font-weight: bold; text-decoration: none; font-size: 15px; display: inline-block; margin: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">📥 엑셀 파일 저장</a>'
     ui_html += '<button onclick="copyToClipboard()" id="copyBtnColab" style="background: #4b4bff; color: white; padding: 12px 24px; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; margin: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">📋 클립보드에 복사</button>'
     ui_html += '</div><p id="copyStatus" style="font-size: 13px; color: #6b7280; margin: 0;">자동 다운로드가 되지 않을 경우 위 버튼을 사용하세요.</p></div>'
-    ui_html += '<script>function copyToClipboard() { try { const b64Data = "' + b64_comments + '"; const text = decodeURIComponent(escape(window.atob(b64Data))); const textArea = document.createElement("textarea"); textArea.value = text; document.body.appendChild(textArea); textArea.select(); document.execCommand("copy"); document.body.removeChild(textArea); const btn = document.getElementById("copyBtnColab"); btn.innerText = "✅ 복사 완료!"; btn.style.background = "#22c55e"; setTimeout(() => { btn.innerText = "📋 클립보드에 복사"; btn.style.background = "#4b4bff"; }, 2000); } catch (err) { console.error("복사 실패", err); } }</script>'
+    ui_html += '<script>function copyToClipboard() { try { const b64Data = "' + b64_comments + '"; const text = decodeURIComponent(escape(window.atob(b64Data))); const textArea = document.createElement("textarea"); textArea.value = text; document.body.appendChild(textArea); textArea.select(); document.execCommand("copy"); document.body.removeChild(textArea); const btn = document.getElementById("copyBtnColab"); btn.innerText = "✅ 복사 완료!"; btn.style.background = "#22c55e"; setTimeout(() => { btn.innerText = "📋 클립보드에 복사"; btn.style.background = "#4b4bff"; }, 2000); } catch (err) { console.error("복사 실패", err); } }</' + 'script>'
     
     display(HTML(ui_html))
 
