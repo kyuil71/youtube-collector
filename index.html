@@ -124,9 +124,17 @@ def get_video_comments(video_id):
             response = request.execute()
             for item in response['items']:
                 comment = item['snippet']['topLevelComment']['snippet']
+                
+                author = str(comment['authorDisplayName'])
+                text_content = str(comment['textDisplay'])
+                
+                # 엑셀 수식 오류 방지: =, +, -, @ 로 시작하는 문자열 앞에 홑따옴표(') 추가
+                if author.startswith(('=', '+', '-', '@')): author = "'" + author
+                if text_content.startswith(('=', '+', '-', '@')): text_content = "'" + text_content
+                
                 comments.append({
-                    "작성자": comment['authorDisplayName'],
-                    "댓글 내용": comment['textDisplay'],
+                    "작성자": author,
+                    "댓글 내용": text_content,
                     "좋아요 수": comment['likeCount'],
                     "작성일": comment['publishedAt']
                 })
