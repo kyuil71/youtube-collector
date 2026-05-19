@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>유튜브 다이렉트 수집기</title>
+    <title>YOUTUBE voice collector</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -22,8 +22,8 @@
                     <path d="M4 4h8v1H4V4zm0 3h8v1H4V7zm0 3h5v1H4v-1z"/>
                 </svg>
             </div>
-            <h1 class="text-2xl font-black tracking-tighter mb-2 drop-shadow-md">YOUTUBE Direct Collector</h1>
-            <p class="text-red-50 text-sm font-semibold opacity-95">앱 내 다이렉트 추출 및 엑셀 자동 저장</p>
+            <h1 class="text-2xl font-black tracking-tighter mb-2 drop-shadow-md">YOUTUBE voice collector</h1>
+            <p class="text-red-50 text-sm font-semibold opacity-95">모바일 최적화 · 특정 동영상의 사용자 댓글 전체 수집</p>
         </header>
 
         <main class="flex-grow p-6 space-y-10 relative z-0">
@@ -104,7 +104,7 @@
                 </button>
             </div>
 
-            <div class="border-t border-gray-100 pt-6">
+            <div id="resultContainer" class="border-t border-gray-100 pt-6 hidden">
                 <div class="flex justify-between items-center mb-4 px-1">
                     <h3 class="text-xl font-black text-[#1a202c]">수집 결과</h3>
                     <span id="resultBadge" class="bg-[#f1f5f9] text-[#64748b] text-[11px] font-bold px-3 py-1 rounded-full uppercase border border-gray-200">대기 중</span>
@@ -131,6 +131,7 @@
         const statCommentCount = document.getElementById('statCommentCount');
         const resultBadge = document.getElementById('resultBadge');
         const previewArea = document.getElementById('previewArea');
+        const resultContainer = document.getElementById('resultContainer'); // 결과 컨테이너 변수 추가
 
         let isProcessing = false;
         let globalCommentsData = [];
@@ -198,7 +199,7 @@
             }
         }
 
-        // 미리보기 렌더링 함수 (테이블 형식으로 디자인 수정)
+        // 미리보기 렌더링 함수
         function renderPreview(comments) {
             const previewLimit = Math.min(comments.length, 30);
             
@@ -261,7 +262,6 @@
             saveExcelBtn.disabled = true;
             copyBtn.disabled = true;
             updateBadge('수집 중...', 'loading');
-            previewArea.innerHTML = `<div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 h-40 flex items-center justify-center shadow-inner text-sm text-blue-400 font-medium animate-pulse">데이터를 불러오는 중입니다...</div>`;
             
             const originalBtnHTML = extractBtn.innerHTML;
             extractBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> 수집 진행 중...';
@@ -271,6 +271,9 @@
                 showStatus('댓글 데이터 요청을 시작합니다...');
                 const comments = await fetchAllComments(apiKey, videoId);
                 
+                // 데이터 수집 후 결과 컨테이너 표시
+                resultContainer.classList.remove('hidden');
+
                 if (comments.length === 0) {
                     showStatus('수집된 댓글이 없습니다.', true);
                     updateBadge('수집 실패', 'wait');
@@ -286,7 +289,7 @@
                     statUrlCount.textContent = processedUrls;
                     statCommentCount.textContent = comments.length.toLocaleString();
                     
-                    // 변경된 테이블 폼으로 렌더링
+                    // 렌더링
                     renderPreview(comments);
                     
                     // 저장/복사 버튼 활성화
@@ -294,6 +297,8 @@
                     copyBtn.disabled = false;
                 }
             } catch (error) {
+                // 에러 발생 시에도 결과 컨테이너를 표시하여 에러 메시지 확인 가능하게 함
+                resultContainer.classList.remove('hidden');
                 showStatus(`수집 실패: ${error.message}`, true);
                 updateBadge('오류 발생', 'wait');
                 previewArea.innerHTML = `<div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 h-40 flex items-center justify-center shadow-inner text-sm text-red-400 font-medium">수집 중 오류가 발생했습니다.</div>`;
