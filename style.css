@@ -8,6 +8,11 @@
     --bg-grad-end: #e2e8f0;
 }
 
+/* 당겨서 새로고침(pull-to-refresh) 막기 */
+html, body {
+    overscroll-behavior-y: none;
+}
+
 body { 
     font-family: 'Pretendard', sans-serif; 
     -webkit-tap-highlight-color: transparent;
